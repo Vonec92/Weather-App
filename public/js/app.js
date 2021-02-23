@@ -1893,9 +1893,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
+    var _this = this;
+
     this.fetchData();
+    var placesAutocomplete = places({
+      appId: 'plE8QTRLUV78',
+      apiKey: 'd95f632a3775b7f61a1d9617a1525352',
+      container: document.querySelector('#address')
+    }).configure({
+      type: 'city',
+      aroundLatLngViaIP: false
+    });
+    var $address = document.querySelector('#address-value');
+    placesAutocomplete.on('change', function (e) {
+      $address.textContent = e.suggestion.value;
+      _this.location.city = "".concat(e.suggestion.name, ", ").concat(e.suggestion.country);
+    });
+    placesAutocomplete.on('clear', function () {
+      $address.textContent = 'none';
+    });
+  },
+  watch: {
+    location: {
+      handler: function handler(newValue, oldValue) {
+        this.fetchData();
+      },
+      deep: true
+    }
   },
   data: function data() {
     return {
@@ -1905,39 +1932,32 @@ __webpack_require__.r(__webpack_exports__);
         summary: '',
         icon: ''
       },
+      daily: [],
       location: {
-        'city': 'Wilrijk'
-      },
-      daily: []
+        city: 'Wilrijk'
+      }
     };
   },
   methods: {
     fetchData: function fetchData() {
-      var _this = this;
+      var _this2 = this;
 
       fetch("/api/weather?city=".concat(this.location.city)).then(function (response) {
         return response.json();
       }).then(function (data) {
         console.log(data);
-        _this.currentTemperature.actual = Math.round(data.list[0].main.temp);
-        _this.currentTemperature.feels = Math.round(data.list[0].main.feels_like);
-        _this.currentTemperature.summary = data.list[0].weather[0].description;
-        _this.currentTemperature.icon = data.list[0].weather[0].icon;
-        _this.daily = data.list;
-        console.log(_this.daily[0].dt);
+        _this2.currentTemperature.actual = Math.round(data.list[0].main.temp);
+        _this2.currentTemperature.feels = Math.round(data.list[0].main.feels_like);
+        _this2.currentTemperature.summary = data.list[0].weather[0].description;
+        _this2.currentTemperature.icon = data.list[0].weather[0].icon;
+        _this2.daily = data.list;
+        console.log(_this2.daily[0].dt);
       });
     },
     toDayOfWeek: function toDayOfWeek(timestamp) {
       var newDate = new Date(timestamp * 1000);
       var days = ['ZO', 'MA', 'DI', 'WO', 'DO', 'VR', 'ZA'];
       return days[newDate.getDay()];
-    }
-  },
-  computed: {
-    dailyFiveDays: function dailyFiveDays() {
-      return this.daily.filter(function (item, index) {
-        return index * 8; //Array will always return an index at +4 position.
-      });
     }
   }
 });
@@ -37557,8 +37577,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "places-input text-gray-800" }, [
-      _c("input", { staticClass: "w-full", attrs: { type: "text" } })
+    return _c("div", { staticClass: " w-full places-input text-gray-800" }, [
+      _c("input", {
+        staticClass: " w-full form-control",
+        attrs: {
+          type: "search",
+          id: "address",
+          placeholder: "Choose a city..."
+        }
+      }),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v("Selected: "),
+        _c("strong", { attrs: { id: "address-value" } }, [_vm._v("none")])
+      ])
     ])
   }
 ]
