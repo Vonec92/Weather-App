@@ -22,18 +22,21 @@
       <div class="future-weather text-sm bg-gray-800 px-6 py-8 overflow-hidden">
         <div
           v-for="(day, index) in daily"
-          :key="day.dt"
+          :key="index"
           class="flex items-center"
           :class="{ 'mt-8' : index > 0}"
+          v-if="index % 8 === 0"
         >
-          <div class="w-1/6 text-lg text-gray-200">{{ day.dt }}</div>
+          <div class="w-1/6 text-lg text-gray-200">{{ toDayOfWeek(day.dt) }}</div>
           <div class="w-4/6 px-5 flex items-center">
-            <div>icon</div>
-            <div class="ml-3">Cloudy bruh</div>
+            <div><img class="w-100" alt="icon"
+                      v-bind:src="'http://openweathermap.org/img/wn/'+ day.weather[0].icon + '@2x.png' "
+            style="width:40px;height:40px;"/></div>
+            <div class="ml-3">{{ day.weather[0].description }}</div>
           </div>
           <div class="w-1/6 text-right">
-            <div>5°C</div>
-            <div>-2°C</div>
+            <div>{{ Math.ceil(day.main.temp_max) }}°C</div>
+            <div>{{ Math.floor(day.main.temp_min) }}°C</div>
           </div>
         </div>
       </div>
@@ -73,7 +76,8 @@ export default {
           this.currentTemperature.summary = data.list[0].weather[0].description;
           this.currentTemperature.icon = data.list[0].weather[0].icon;
 
-          this.daily = data.list[0];
+          this.daily = data.list;
+          console.log(this.daily[0].dt);
 
         })
     },
@@ -83,6 +87,14 @@ export default {
 
       return days[newDate.getDay()];
     }
-  }
+  },
+  computed: {
+    dailyFiveDays() {
+      return this.daily.filter((item, index) => {
+
+        return index * 8; //Array will always return an index at +4 position.
+      });
+    }
+  },
 }
 </script>
