@@ -1951,7 +1951,6 @@ __webpack_require__.r(__webpack_exports__);
         _this2.currentTemperature.summary = data.list[0].weather[0].description;
         _this2.currentTemperature.icon = data.list[0].weather[0].icon;
         _this2.daily = data.list;
-        console.log(_this2.daily[0].dt);
       });
     },
     toDayOfWeek: function toDayOfWeek(timestamp) {
@@ -37529,7 +37528,7 @@ var render = function() {
                     class: { "mt-8": index > 0 }
                   },
                   [
-                    _c("div", { staticClass: "w-1/6 text-lg text-gray-200" }, [
+                    _c("div", { staticClass: "w-1/6 text-2xl text-gray-200" }, [
                       _vm._v(_vm._s(_vm.toDayOfWeek(day.dt)))
                     ]),
                     _vm._v(" "),
@@ -37537,7 +37536,7 @@ var render = function() {
                       _c("div", [
                         _c("img", {
                           staticClass: "w-100",
-                          staticStyle: { width: "40px", height: "40px" },
+                          staticStyle: { width: "80px", height: "80px" },
                           attrs: {
                             alt: "icon",
                             src:
@@ -37548,17 +37547,17 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "ml-3" }, [
+                      _c("div", { staticClass: "text-2xl ml-3" }, [
                         _vm._v(_vm._s(day.weather[0].description))
                       ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "w-1/6 text-right" }, [
-                      _c("div", [
+                      _c("div", { staticClass: "text-2xl" }, [
                         _vm._v(_vm._s(Math.ceil(day.main.temp_max)) + "°C")
                       ]),
                       _vm._v(" "),
-                      _c("div", [
+                      _c("div", { staticClass: "text-2xl" }, [
                         _vm._v(_vm._s(Math.floor(day.main.temp_min)) + "°C")
                       ])
                     ])
